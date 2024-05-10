@@ -1,42 +1,54 @@
-const path = require('path')
+//Server Utils
 const express = require('express')
-const generateUniqueId = require('generate-unique-id')
 const app = express()
 const PORT = 3001
-const { updateJSON, readJSON } = require('./saveJSON')
+const routes = require('./routes')
+
+//Interim
 app.use(express.static('public'))
 app.use(express.json()) 
+app.use( routes )
 
-app.get('/', (req,res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+//Serves index.html
+// app.get('/', (req,res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'index.html'))
+// })
 
-app.get('/notes', (req,res) => {
-    res.sendFile(path.join(__dirname, 'public', 'notes.html'))
-})
 
-app.get('/api/notes', async (req,res) => {
-    JSONNotes = await readJSON()
-    res.json(JSONNotes)
-})
+// //Servers notes page
+// app.get('/notes', (req,res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'notes.html'))
+// })
 
-app.post('/api/notes', async (req,res) => {
-    const savedNotes = await readJSON()
-    const inNotes = req.body
-    inNotes.id = generateUniqueId()
-    savedNotes.push(inNotes)
-    await updateJSON(savedNotes)
-    res.json(savedNotes)
-})
 
-app.delete('/api/notes/:id', async (req,res)  => {
-    const savedNotes = await readJSON()
-    const id = req.params.id
-    updatedNotes = savedNotes.filter((obj) => obj.id !== id)
-    await updateJSON(updatedNotes)
-    res.end()
-})
+//Sends saved notes to fronend
+// app.get('/api/notes', async (req,res) => {
+//     JSONNotes = await readJSON()
+//     res.json(JSONNotes)
+// })
 
+
+//Adds a new note
+// app.post('/api/notes', async (req,res) => {
+//     const inboundNotes = req.body
+//     const savedNotes = await updateNotes(inboundNotes)
+//     res.json(savedNotes)
+// })
+
+
+
+//Deletes a note
+// app.delete('/api/notes/:id', async (req,res)  => {
+//     const id = req.params.id
+//     await deleteNote(id)
+//     res.end()
+// })
+
+
+
+
+
+//Starts server
 app.listen(PORT, () => {
     console.log(`Server.js is listening on port ${PORT}`)
 })
